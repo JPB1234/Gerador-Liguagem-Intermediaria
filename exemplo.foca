@@ -1,11 +1,5 @@
 int main()
 {
-	int a;
-	float b;
-	char c;
-	int v;
-
-	a = a + 1;
-
-	
+	bool x;
+	x = 1 > 1.0 || true;
 }

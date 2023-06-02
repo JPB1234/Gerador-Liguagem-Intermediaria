@@ -67,7 +67,14 @@ void yyerror(string);
 
 %start S
 
+
 %left '+'
+%left '-'
+%right '*'
+
+%left TK_OR
+%right '>'
+
 
 %%
 
@@ -168,7 +175,7 @@ E 			: E '*' E
 						$1.tipo = "float";
 						convTest = 2;
 					}
-					else{yyerror("Variaveis de tipos diferentes");}
+					else{yyerror("Variaveis de tipos diferentes (Operação '*')");}
 				}
 
 				
@@ -206,7 +213,7 @@ E 			: E '/' E
 						$1.tipo = "float";
 						convTest = 2;
 					}
-					else{yyerror("Variaveis de tipos diferentes");}
+					else{yyerror("Variaveis de tipos diferentes (Operação '/')");}
 				}
 
 				
@@ -243,7 +250,7 @@ E 			: E '+' E
 						$1.tipo = "float";
 						convTest = 2;
 					}
-					else{yyerror("Variaveis de tipos diferentes");}
+					else{yyerror("Variaveis de tipos diferentes (Operação '+')");}
 				}
 
 				
@@ -281,7 +288,7 @@ E 			: E '-' E
 						$1.tipo = "float";
 						convTest = 2;
 					}
-					else{yyerror("Variaveis de tipos diferentes");}
+					else{yyerror("Variaveis de tipos diferentes (Operação '-')");}
 				}
 
 				
@@ -321,12 +328,11 @@ E 			: E '>' E
 						convTest = 2;
 					}
 					else{
-						yyerror("Variaveis de tipos diferentes, que nao suportao convercao");
+						yyerror("Variaveis de tipos diferentes, que nao suportao convercao (Operação '>')");
 					}
 				}
 
 				
-				$$.tipo = $3.tipo;
 				string label = genLabel();
 				
 				if(convTest == 1){
@@ -344,7 +350,10 @@ E 			: E '>' E
 				TIPO_SIMBOLO valor;
 				valor.nomeVal = $$.label;
 				valor.tipoVal = $$.tipo;
+				$$.tipo = "bool";
 
+				cout << valor.nomeVal << endl;
+				cout << valor.tipoVal << endl;
 				
 				tabela_de_simbolos.push_back(valor);
 			}
@@ -363,12 +372,12 @@ E 			: E '<' E
 						convTest = 2;
 					}
 					else{
-						yyerror("Variaveis de tipos diferentes, que nao suportao convercao");
+						yyerror("Variaveis de tipos diferentes, que nao suportao convercao (Operação '<')");
 					}
 				}
 
 				
-				$$.tipo = $3.tipo;
+	
 				string label = genLabel();
 				
 				if(convTest == 1){
@@ -406,12 +415,12 @@ E 			: E TK_REL_IGUALD E
 						convTest = 2;
 					}
 					else{
-						yyerror("Variaveis de tipos diferentes, que nao suportao convercao");
+						yyerror("Variaveis de tipos diferentes, que nao suportao convercao (Operação '==')");
 					}
 				}
 
 				
-				$$.tipo = $3.tipo;
+			
 				string label = genLabel();
 				
 				if(convTest == 1){
@@ -447,12 +456,12 @@ E 			: E TK_REL_DIF E
 						convTest = 2;
 					}
 					else{
-						yyerror("Variaveis de tipos diferentes, que nao suportao convercao");
+						yyerror("Variaveis de tipos diferentes, que nao suportao convercao (Operação '!=')");
 					}
 				}
 
 				
-				$$.tipo = $3.tipo;
+				
 				string label = genLabel();
 				
 				if(convTest == 1){
@@ -488,12 +497,12 @@ E 			: E TK_REL_MAIOR E
 						convTest = 2;
 					}
 					else{
-						yyerror("Variaveis de tipos diferentes, que nao suportao convercao");
+						yyerror("Variaveis de tipos diferentes, que nao suportao convercao (Operação '>=')");
 					}
 				}
 
 				
-				$$.tipo = $3.tipo;
+			
 				string label = genLabel();
 				
 				if(convTest == 1){
@@ -529,12 +538,12 @@ E 			: E TK_REL_MENOR E
 						convTest = 2;
 					}
 					else{
-						yyerror("Variaveis de tipos diferentes, que nao suportao convercao");
+						yyerror("Variaveis de tipos diferentes, que nao suportao convercao (Operação '<=')");
 					}
 				}
 
 				
-				$$.tipo = $3.tipo;
+				
 				string label = genLabel();
 				
 				if(convTest == 1){
@@ -571,11 +580,10 @@ E 			: E TK_OR E
 						$1.tipo = "float";
 						convTest = 2;
 					}
-					else{yyerror("Variaveis de tipos diferentes");}
+					else{yyerror("Variaveis de tipos diferentes (Operação '||')");}
 				}
-
 				
-				$$.tipo = $3.tipo;
+		
 				string label = genLabel();
 				if(convTest == 1){
 					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" || " + "(float)" +$3.label + ";\n";
@@ -609,11 +617,11 @@ E 			: E TK_AND E
 						$1.tipo = "float";
 						convTest = 2;
 					}
-					else{yyerror("Variaveis de tipos diferentes");}
+					else{yyerror("Variaveis de tipos diferentes (Operação '&&')");}
 				}
 
 				
-				$$.tipo = $3.tipo;
+				
 				string label = genLabel();
 				if(convTest == 1){
 					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" && " + "(float)" +$3.label + ";\n";
@@ -652,12 +660,11 @@ E 			: E TK_AND E
 				}
 				$1.label = val.tempName;
 				$$.tipo = val.tipoVal;
-				if($$.tipo == "bool"){
-					$$.tipo = $3.tipo;
-				}
+				
 				cout << $$.tipo << endl;
 				cout << val.tempName << endl;
-				cout << $$.traducao << endl;
+				cout << $3.tipo << endl;
+
 
 				if($$.tipo != $3.tipo){
 					if($$.tipo == "float" && $3.tipo == "int"){
@@ -665,7 +672,7 @@ E 			: E TK_AND E
 						$$.traducao =  $1.traducao + $3.traducao + "\t"+ $$.label + " = " + "(float)" +$3.label + ";\n";
 					}
 					else{
-						yyerror("Variaveis de tipos diferentes");
+						yyerror("Variaveis de tipos diferentes (Operação '=') ");
 					}
 				}
 				else
@@ -751,12 +758,7 @@ E 			: E TK_AND E
 				$$.label = label;
 
 				/* Erro de double free quando se é colocado a tabela de simbolos aqui*/
-				TIPO_SIMBOLO valor;
-				valor.nomeVal = $$.label;
-				valor.tipoVal = "bool";
-
 				
-				tabela_de_simbolos.push_back(valor);
 
 	
 			}
@@ -768,7 +770,12 @@ E 			: E TK_AND E
 				$$.label = label;
 
 				/* Erro de double free quando se é colocado a tabela de simbolos aqui*/
+				TIPO_SIMBOLO valor;
+				valor.nomeVal = $$.label;
+				valor.tipoVal = "bool";
 
+				
+				tabela_de_simbolos.push_back(valor);
 	
 			}
 
