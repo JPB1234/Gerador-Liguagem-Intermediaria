@@ -65,7 +65,7 @@ string genLabel(){
 
 	stringstream ss;
 	ss <<"temp" << contador++;
-	return ss.str();
+	return ss.str(); 
 }
 
 int yylex(void);
@@ -92,10 +92,12 @@ void yyerror(string);
 %left TK_AND
 %right '>'
 %right '<'
-%right TK_REL_MENOR
-%right TK_REL_MAIOR
 %right TK_REL_IGUALD
+%right TK_REL_MAIOR
+%right TK_REL_MENOR
 %right TK_REL_DIF
+
+
 
 
 %%
