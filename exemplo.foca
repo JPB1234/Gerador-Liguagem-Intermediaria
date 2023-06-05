@@ -1,7 +1,7 @@
 int main()
 {
-	bool x;
-	x = 1 < 1.0 || true; 
+	float a;
+	a = (float)1 * 1.0; 
 
 	
 

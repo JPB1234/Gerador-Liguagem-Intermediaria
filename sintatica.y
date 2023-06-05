@@ -75,7 +75,7 @@ void yyerror(string);
 %token TK_INT TK_FLOAT TK_CHAR TK_STRING TK_BOOLEAN
 %token TK_MAIN TK_ID TK_TIPO_INT TK_TIPO_FLOAT TK_TIPO_CHAR TK_TIPO_STRING TK_TIPO_BOOLEAN
 %token TK_OPERADORES
-%token TK_CONV_FLOAT
+%token TK_CONV_FLOAT TK_CONV_INT
 %token TK_AND TK_OR
 %token TK_REL_IGUALD TK_REL_MAIOR TK_REL_MENOR TK_REL_DIF
 %token TK_FIM TK_ERROR 
@@ -726,7 +726,7 @@ E 			: E TK_AND E
 			{
 				$$.tipo = "float";
 				string label = genLabel();
-				$$.traducao = "\t" + $$.tipo +" " +label+ " = "  + "(float)" + $2.traducao + ";\n";
+				$$.traducao = "\t" +label+ " = "  + "(float)" + $2.traducao + ";\n";
 				$$.label = label;
 
 				/*coloca na lista a temporaria*/
@@ -734,6 +734,22 @@ E 			: E TK_AND E
 				TIPO_SIMBOLO valor;
 				valor.nomeVal = $$.label;
 				valor.tipoVal = "float";
+
+				
+				tabela_de_simbolos.push_back(valor);
+			}
+			| TK_CONV_FLOAT TK_INT
+			{
+				$$.tipo = "int";
+				string label = genLabel();
+				$$.traducao = "\t" +label+ " = "  + "(int)" + $2.traducao + ";\n";
+				$$.label = label;
+
+				/*coloca na lista a temporaria*/
+
+				TIPO_SIMBOLO valor;
+				valor.nomeVal = $$.label;
+				valor.tipoVal = "int";
 
 				
 				tabela_de_simbolos.push_back(valor);
@@ -806,11 +822,18 @@ E 			: E TK_AND E
 			{
 				$$.tipo = "bool";
 				string label = genLabel();
+
+				if($1.traducao == "true"){
+					$1.traducao = "1";
+				}
+				else{
+					$1.traducao = "0";
+				}
 				$$.traducao = "\t" +label+ " = "  + $1.traducao + ";\n";
 				$$.label = label;
 
-				/* Erro de double free quando se é colocado a tabela de simbolos aqui*/
 				TIPO_SIMBOLO valor;
+
 				valor.nomeVal = $$.label;
 				valor.tipoVal = "bool";
 

@@ -56,6 +56,7 @@ BOOLEAN ({TRUE}|{FALSE})
 
 "="         {return '=';}
 "(float)"   {return TK_CONV_FLOAT;}
+"(int)"     {return TK_CONV_INT;}
 
 
 {INT}		{ yylval.traducao = yytext; return TK_INT; }

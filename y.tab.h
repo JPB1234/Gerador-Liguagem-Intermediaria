@@ -68,14 +68,15 @@ extern int yydebug;
     TK_TIPO_BOOLEAN = 269,         /* TK_TIPO_BOOLEAN  */
     TK_OPERADORES = 270,           /* TK_OPERADORES  */
     TK_CONV_FLOAT = 271,           /* TK_CONV_FLOAT  */
-    TK_AND = 272,                  /* TK_AND  */
-    TK_OR = 273,                   /* TK_OR  */
-    TK_REL_IGUALD = 274,           /* TK_REL_IGUALD  */
-    TK_REL_MAIOR = 275,            /* TK_REL_MAIOR  */
-    TK_REL_MENOR = 276,            /* TK_REL_MENOR  */
-    TK_REL_DIF = 277,              /* TK_REL_DIF  */
-    TK_FIM = 278,                  /* TK_FIM  */
-    TK_ERROR = 279                 /* TK_ERROR  */
+    TK_CONV_INT = 272,             /* TK_CONV_INT  */
+    TK_AND = 273,                  /* TK_AND  */
+    TK_OR = 274,                   /* TK_OR  */
+    TK_REL_IGUALD = 275,           /* TK_REL_IGUALD  */
+    TK_REL_MAIOR = 276,            /* TK_REL_MAIOR  */
+    TK_REL_MENOR = 277,            /* TK_REL_MENOR  */
+    TK_REL_DIF = 278,              /* TK_REL_DIF  */
+    TK_FIM = 279,                  /* TK_FIM  */
+    TK_ERROR = 280                 /* TK_ERROR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -98,14 +99,15 @@ extern int yydebug;
 #define TK_TIPO_BOOLEAN 269
 #define TK_OPERADORES 270
 #define TK_CONV_FLOAT 271
-#define TK_AND 272
-#define TK_OR 273
-#define TK_REL_IGUALD 274
-#define TK_REL_MAIOR 275
-#define TK_REL_MENOR 276
-#define TK_REL_DIF 277
-#define TK_FIM 278
-#define TK_ERROR 279
+#define TK_CONV_INT 272
+#define TK_AND 273
+#define TK_OR 274
+#define TK_REL_IGUALD 275
+#define TK_REL_MAIOR 276
+#define TK_REL_MENOR 277
+#define TK_REL_DIF 278
+#define TK_FIM 279
+#define TK_ERROR 280
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
