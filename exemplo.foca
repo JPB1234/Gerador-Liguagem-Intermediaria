@@ -1,5 +1,5 @@
 int main()
 {
 	bool y;
-	y = 'c' > 'g';
+	y = 1 > 1.0 || true;
 }

@@ -89,7 +89,13 @@ void yyerror(string);
 %right '/'
 
 %left TK_OR
+%left TK_AND
 %right '>'
+%right '<'
+%right TK_REL_MENOR
+%right TK_REL_MAIOR
+%right TK_REL_IGUALD
+%right TK_REL_DIF
 
 
 %%
@@ -411,7 +417,10 @@ E 			: E '<' E
 				TIPO_SIMBOLO valor;
 				valor.nomeVal = $$.label;
 				valor.tipoVal = $$.tipo;
+				$$.tipo = "bool";
 
+				cout << valor.nomeVal << endl;
+				cout << valor.tipoVal << endl;
 				
 				tabela_de_simbolos.push_back(valor);
 			}
@@ -454,7 +463,10 @@ E 			: E TK_REL_IGUALD E
 				TIPO_SIMBOLO valor;
 				valor.nomeVal = $$.label;
 				valor.tipoVal = $$.tipo;
+				$$.tipo = "bool";
 
+				cout << valor.nomeVal << endl;
+				cout << valor.tipoVal << endl;
 				
 				tabela_de_simbolos.push_back(valor);
 			}
@@ -495,7 +507,10 @@ E 			: E TK_REL_DIF E
 				TIPO_SIMBOLO valor;
 				valor.nomeVal = $$.label;
 				valor.tipoVal = $$.tipo;
+				$$.tipo = "bool";
 
+				cout << valor.nomeVal << endl;
+				cout << valor.tipoVal << endl;
 				
 				tabela_de_simbolos.push_back(valor);
 			}
@@ -536,7 +551,10 @@ E 			: E TK_REL_MAIOR E
 				TIPO_SIMBOLO valor;
 				valor.nomeVal = $$.label;
 				valor.tipoVal = $$.tipo;
+				$$.tipo = "bool";
 
+				cout << valor.nomeVal << endl;
+				cout << valor.tipoVal << endl;
 				
 				tabela_de_simbolos.push_back(valor);
 			}
@@ -577,7 +595,10 @@ E 			: E TK_REL_MENOR E
 				TIPO_SIMBOLO valor;
 				valor.nomeVal = $$.label;
 				valor.tipoVal = $$.tipo;
+				$$.tipo = "bool";
 
+				cout << valor.nomeVal << endl;
+				cout << valor.tipoVal << endl;
 				
 				tabela_de_simbolos.push_back(valor);
 			}
