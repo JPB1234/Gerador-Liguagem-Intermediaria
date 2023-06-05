@@ -1,5 +1,5 @@
 int main()
 {
-	bool y;
-	y = 1 > 1.0 || true;
+	bool x;
+	x = 1 > 1.0 || true;
 }

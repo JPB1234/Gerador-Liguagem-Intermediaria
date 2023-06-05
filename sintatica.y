@@ -552,6 +552,7 @@ E 			: E TK_REL_MAIOR E
 				valor.nomeVal = $$.label;
 				valor.tipoVal = $$.tipo;
 				$$.tipo = "bool";
+				
 
 				cout << valor.nomeVal << endl;
 				cout << valor.tipoVal << endl;
