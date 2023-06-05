@@ -1,9 +1,8 @@
 int main()
 {
 	bool x;
-	bool y;
 	x = 1 > 1.0 || true;
 
-	y = x && false;
+	
 
 }

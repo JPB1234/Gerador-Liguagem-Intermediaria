@@ -32,14 +32,29 @@ void printVals(){
 
 	for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
 
-		if(empty(index.tempName))
+		if(index.tipoVal == "bool")
 		{
-			cout<< "	" <<index.tipoVal << " " <<index.nomeVal << ";" <<endl;
+			if(empty(index.tempName))
+			{
+			cout<< "	" <<"int" << " " <<index.nomeVal << ";" <<endl;
+			}
+			else
+			{
+			cout<< "	" <<"int" << " " <<index.tempName << ";" <<endl;
+			}
 		}
 		else
 		{
+			if(empty(index.tempName))
+			{
+			cout<< "	" <<index.tipoVal << " " <<index.nomeVal << ";" <<endl;
+			}
+			else
+			{
 			cout<< "	" <<index.tipoVal << " " <<index.tempName << ";" <<endl;
+			}
 		}
+		
 		
 	}
 	
@@ -71,6 +86,7 @@ void yyerror(string);
 %left '+'
 %left '-'
 %right '*'
+%right '/'
 
 %left TK_OR
 %right '>'
