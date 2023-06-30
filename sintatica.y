@@ -689,7 +689,7 @@ E 			: E TK_AND E
 				
 				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
 					
-					if(index.nomeVal == $$.label){
+					if(index.nomeVal == $1.label){
 						val = index;
 						missing = true;
 
@@ -699,17 +699,17 @@ E 			: E TK_AND E
 					yyerror("Variavel não declarada");
 				}
 				$1.label = val.tempName;
-				$$.tipo = val.tipoVal;
+				$1.tipo = val.tipoVal;
 				
-				cout << $$.tipo << endl;
+				cout << $1.tipo << endl;
 				cout << val.tempName << endl;
 				cout << $3.tipo << endl;
 
 
-				if($$.tipo != $3.tipo){
+				if($1.tipo != $3.tipo){
 					if($$.tipo == "float" && $3.tipo == "int"){
 						$3.tipo = "float";
-						$$.traducao =  $1.traducao + $3.traducao + "\t"+ $$.label + " = " + "(float)" +$3.label + ";\n";
+						$$.traducao =  $3.traducao + "\t"+ $$.label + " = " + "(float)" +$3.label + ";\n";
 					}
 					else{
 						yyerror("Variaveis de tipos diferentes (Operação '=') ");
@@ -718,7 +718,7 @@ E 			: E TK_AND E
 				else
 				{
 
-					$$.traducao =  $1.traducao + $3.traducao + "\t"+ $1.label + " = " + $3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t"+ $1.label + " = " + $3.label + ";\n";
 				}
 				
 			}

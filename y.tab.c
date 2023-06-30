@@ -1957,7 +1957,7 @@ yyreduce:
 				
 				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
 					
-					if(index.nomeVal == yyval.label){
+					if(index.nomeVal == yyvsp[-2].label){
 						val = index;
 						missing = true;
 
@@ -1967,17 +1967,17 @@ yyreduce:
 					yyerror("Variavel não declarada");
 				}
 				yyvsp[-2].label = val.tempName;
-				yyval.tipo = val.tipoVal;
+				yyvsp[-2].tipo = val.tipoVal;
 				
-				cout << yyval.tipo << endl;
+				cout << yyvsp[-2].tipo << endl;
 				cout << val.tempName << endl;
 				cout << yyvsp[0].tipo << endl;
 
 
-				if(yyval.tipo != yyvsp[0].tipo){
+				if(yyvsp[-2].tipo != yyvsp[0].tipo){
 					if(yyval.tipo == "float" && yyvsp[0].tipo == "int"){
 						yyvsp[0].tipo = "float";
-						yyval.traducao =  yyvsp[-2].traducao + yyvsp[0].traducao + "\t"+ yyval.label + " = " + "(float)" +yyvsp[0].label + ";\n";
+						yyval.traducao =  yyvsp[0].traducao + "\t"+ yyval.label + " = " + "(float)" +yyvsp[0].label + ";\n";
 					}
 					else{
 						yyerror("Variaveis de tipos diferentes (Operação '=') ");
@@ -1986,7 +1986,7 @@ yyreduce:
 				else
 				{
 
-					yyval.traducao =  yyvsp[-2].traducao + yyvsp[0].traducao + "\t"+ yyvsp[-2].label + " = " + yyvsp[0].label + ";\n";
+					yyval.traducao =  yyvsp[0].traducao + "\t"+ yyvsp[-2].label + " = " + yyvsp[0].label + ";\n";
 				}
 				
 			}

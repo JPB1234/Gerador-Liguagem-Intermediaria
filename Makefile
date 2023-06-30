@@ -5,3 +5,6 @@ all:
 		g++ -o glf y.tab.c -ll
 
 		./glf < exemplo.foca
+
+
+		
