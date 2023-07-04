@@ -27,6 +27,8 @@ typedef struct
 
 std::list<TIPO_SIMBOLO> tabela_de_simbolos;
 vector<atributos> tabela_de_temporarias;
+int escopo = 0;
+std::vector<std::list<TIPO_SIMBOLO>> pilha_de_simbolos;
 
 void printVals(){ 
 
@@ -68,9 +70,13 @@ string genLabel(){
 	return ss.str(); 
 }
 
+
+
 int yylex(void);
 void yyerror(string);
 %}
+
+
 
 %token TK_INT TK_FLOAT TK_CHAR TK_STRING TK_BOOLEAN
 %token TK_MAIN TK_ID TK_TIPO_INT TK_TIPO_FLOAT TK_TIPO_CHAR TK_TIPO_STRING TK_TIPO_BOOLEAN
@@ -78,6 +84,7 @@ void yyerror(string);
 %token TK_CONV_FLOAT TK_CONV_INT
 %token TK_AND TK_OR
 %token TK_REL_IGUALD TK_REL_MAIOR TK_REL_MENOR TK_REL_DIF
+%token TK_IF TK_ELSE TK_FOR TK_WHILE
 %token TK_FIM TK_ERROR 
 
 %start S
@@ -112,7 +119,8 @@ S 			: TK_TIPO_INT TK_MAIN '(' ')' BLOCO
 
 BLOCO		: '{' COMANDOS '}'
 			{
-				
+
+				pilha_de_simbolos.push_back(tabela_de_simbolos);
 				$$.traducao = $2.traducao;
 			
 			}
@@ -129,61 +137,96 @@ COMANDOS	: COMANDO COMANDOS
 			;
 
 COMANDO 	: E ';'
+			| BLOCO
 			| TK_TIPO_INT TK_ID ';'
 			{
+				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
+					
+					if(index.nomeVal == $2.label){
+						yyerror("Variavel já declarada (TK_TIPO_INT)");
+					}
+				}
+
 				TIPO_SIMBOLO valor;
-		
 				valor.nomeVal = $2.label;
 				valor.tempName = genLabel();
 				valor.tipoVal = "int";
-
 				
+
+				$$.traducao = "";
 				tabela_de_simbolos.push_back(valor);
 			}
 
 			|TK_TIPO_FLOAT TK_ID ';'
 			{
+				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
+					
+					if(index.nomeVal == $2.label){
+						yyerror("Variavel já declarada (TK_TIPO_FLOAT)");
+					}
+				}
+
 				TIPO_SIMBOLO valor;
 				valor.nomeVal = $2.label;
 				valor.tempName = genLabel();
 				valor.tipoVal = "float";
 
-				
+				$$.traducao = "";
 				tabela_de_simbolos.push_back(valor);
 			}
 			|TK_TIPO_CHAR TK_ID ';'
 			{
+				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
+					
+					if(index.nomeVal == $2.label){
+						yyerror("Variavel já declarada (TK_TIPO_CHAR)");
+					}
+				}
+
 				TIPO_SIMBOLO valor;
 				valor.nomeVal = $2.label;
 				valor.tempName = genLabel();
 				valor.tipoVal = "char";
 
-				
+				$$.traducao = "";
 				tabela_de_simbolos.push_back(valor);
 			}
 			|TK_TIPO_STRING TK_ID ';'
 			{
+				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
+					
+					if(index.nomeVal == $2.label){
+						yyerror("Variavel já declarada (TK_TIPO_STRING)");
+					}
+				}
+
 				TIPO_SIMBOLO valor;
 				valor.nomeVal = $2.label;
 				valor.tempName = genLabel();
 				valor.tipoVal = "string";
 
-				
+				$$.traducao = "";
 				tabela_de_simbolos.push_back(valor);
 			}
 			|TK_TIPO_BOOLEAN TK_ID ';'
 			{
+				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
+					
+					if(index.nomeVal == $2.label){
+						yyerror("Variavel já declarada (TK_TIPO_BOOLEAN)");
+					}
+				}
+
 				TIPO_SIMBOLO valor;
 				valor.nomeVal = $2.label;
 				valor.tempName = genLabel();
 				valor.tipoVal = "bool";
 
-				
+				$$.traducao = "";
 				tabela_de_simbolos.push_back(valor);
 			}
-
 			;
-
+E			
 			
 			// Operadoções aritmeticas
 E 			: E '*' E
@@ -207,13 +250,13 @@ E 			: E '*' E
 				$$.tipo = $3.tipo;
 				string label = genLabel();
 				if(convTest == 1){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" * " + "(float)" +$3.label + ";\n";
+					$$.traducao = $3.traducao + "\t" + label +" = "+ $1.label +" * " + "(float)" +$3.label + ";\n";
 				}
 				else if(convTest == 2){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" * "+$3.label + ";\n";
+					$$.traducao = $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" * "+$3.label + ";\n";
 				}
 				else{
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = " + $1.label +" * "+$3.label + ";\n";
+					$$.traducao = $3.traducao + "\t" + label +" = " + $1.label +" * "+$3.label + ";\n";
 				}
 				$$.label = label;
 
@@ -244,13 +287,13 @@ E 			: E '/' E
 				$$.tipo = $3.tipo;
 				string label = genLabel();
 				if(convTest == 1){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" / " + "(float)" +$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ $1.label +" / " + "(float)" +$3.label + ";\n";
 				}
 				else if(convTest == 2){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" / "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" / "+$3.label + ";\n";
 				}
 				else{
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = " + $1.label +" / "+$3.label + ";\n";
+					$$.traducao = $3.traducao + "\t" + label +" = " + $1.label +" / "+$3.label + ";\n";
 				}
 				$$.label = label;
 
@@ -281,13 +324,13 @@ E 			: E '+' E
 				$$.tipo = $3.tipo;
 				string label = genLabel();
 				if(convTest == 1){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" + " + "(float)" +$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ $1.label +" + " + "(float)" +$3.label + ";\n";
 				}
 				else if(convTest == 2){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" + "+$3.label + ";\n";
+					$$.traducao = $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" + "+$3.label + ";\n";
 				}
 				else{
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = " + $1.label +" + "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = " + $1.label +" + "+$3.label + ";\n";
 				}
 				$$.label = label;
 
@@ -319,13 +362,13 @@ E 			: E '-' E
 				$$.tipo = $3.tipo;
 				string label = genLabel();
 				if(convTest == 1){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" - "+ "(float)" +$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ $1.label +" - "+ "(float)" +$3.label + ";\n";
 				}
 				else if(convTest == 2){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" - "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" - "+$3.label + ";\n";
 				}
 				else{
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = " + $1.label +" - "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = " + $1.label +" - "+$3.label + ";\n";
 				}
 				$$.label = label;
 
@@ -360,13 +403,13 @@ E 			: E '>' E
 				string label = genLabel();
 				
 				if(convTest == 1){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" > "+ "(float)" +$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ $1.label +" > "+ "(float)" +$3.label + ";\n";
 				}
 				else if(convTest == 2){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" > "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" > "+$3.label + ";\n";
 				}
 				else{
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = " + $1.label +" > "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = " + $1.label +" > "+$3.label + ";\n";
 				}
 
 				$$.label = label;
@@ -405,13 +448,13 @@ E 			: E '<' E
 				string label = genLabel();
 				
 				if(convTest == 1){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" < "+ "(float)" +$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ $1.label +" < "+ "(float)" +$3.label + ";\n";
 				}
 				else if(convTest == 2){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" < "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" < "+$3.label + ";\n";
 				}
 				else{
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = " + $1.label +" < "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = " + $1.label +" < "+$3.label + ";\n";
 				}
 
 				$$.label = label;
@@ -451,13 +494,13 @@ E 			: E TK_REL_IGUALD E
 				string label = genLabel();
 				
 				if(convTest == 1){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" == "+ "(float)" +$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ $1.label +" == "+ "(float)" +$3.label + ";\n";
 				}
 				else if(convTest == 2){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" == "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" == "+$3.label + ";\n";
 				}
 				else{
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = " + $1.label +" == "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = " + $1.label +" == "+$3.label + ";\n";
 				}
 
 				$$.label = label;
@@ -495,13 +538,13 @@ E 			: E TK_REL_DIF E
 				string label = genLabel();
 				
 				if(convTest == 1){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" != "+ "(float)" +$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ $1.label +" != "+ "(float)" +$3.label + ";\n";
 				}
 				else if(convTest == 2){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" != "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" != "+$3.label + ";\n";
 				}
 				else{
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = " + $1.label +" != "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = " + $1.label +" != "+$3.label + ";\n";
 				}
 
 				$$.label = label;
@@ -539,13 +582,13 @@ E 			: E TK_REL_MAIOR E
 				string label = genLabel();
 				
 				if(convTest == 1){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" >= "+ "(float)" +$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ $1.label +" >= "+ "(float)" +$3.label + ";\n";
 				}
 				else if(convTest == 2){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" >= "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" >= "+$3.label + ";\n";
 				}
 				else{
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = " + $1.label +" >= "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = " + $1.label +" >= "+$3.label + ";\n";
 				}
 
 				$$.label = label;
@@ -584,13 +627,13 @@ E 			: E TK_REL_MENOR E
 				string label = genLabel();
 				
 				if(convTest == 1){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" <= "+ "(float)" +$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ $1.label +" <= "+ "(float)" +$3.label + ";\n";
 				}
 				else if(convTest == 2){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" <= "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" <= "+$3.label + ";\n";
 				}
 				else{
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = " + $1.label +" <= "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = " + $1.label +" <= "+$3.label + ";\n";
 				}
 
 				$$.label = label;
@@ -626,13 +669,13 @@ E 			: E TK_OR E
 		
 				string label = genLabel();
 				if(convTest == 1){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" || " + "(float)" +$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ $1.label +" || " + "(float)" +$3.label + ";\n";
 				}
 				else if(convTest == 2){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" || "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" || "+$3.label + ";\n";
 				}
 				else{
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = " + $1.label +" || "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = " + $1.label +" || "+$3.label + ";\n";
 				}
 				$$.label = label;
 
@@ -664,13 +707,13 @@ E 			: E TK_AND E
 				
 				string label = genLabel();
 				if(convTest == 1){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ $1.label +" && " + "(float)" +$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ $1.label +" && " + "(float)" +$3.label + ";\n";
 				}
 				else if(convTest == 2){
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" && "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = "+ "(float)" + $1.label +" && "+$3.label + ";\n";
 				}
 				else{
-					$$.traducao = $1.traducao + $3.traducao + "\t" + label +" = " + $1.label +" && "+$3.label + ";\n";
+					$$.traducao =  $3.traducao + "\t" + label +" = " + $1.label +" && "+$3.label + ";\n";
 				}
 				$$.label = label;
 

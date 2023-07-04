@@ -1,10 +1,17 @@
 int main()
 {
-	bool a;
-	int b;
-	a = true;
-	b = 25;
-
+	float a;
+	a = 1.0;
+	{
+		int b;
+		b = 2;
+		{
+			char c;
+			c = 'c';
+		}
 	
+	}
+	
+
 
 }
