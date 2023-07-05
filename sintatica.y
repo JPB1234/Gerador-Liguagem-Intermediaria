@@ -25,7 +25,7 @@ typedef struct
 
 } TIPO_SIMBOLO;
 
-std::list<TIPO_SIMBOLO> tabela_de_simbolos;
+
 vector<atributos> tabela_de_temporarias;
 int escopo = 0;
 std::vector<std::list<TIPO_SIMBOLO>> pilha_de_simbolos;
@@ -108,7 +108,6 @@ void yyerror(string);
 
 S 			: TK_TIPO_INT TK_MAIN '(' ')' BLOCO
 			{
-				pilha_de_simbolos.push_back(tabela_de_simbolos);
 				cout << "/*Compilador FOCA*/\n" << "#include <iostream>\n#include<string.h>\n#include<stdio.h>\nint main(void)\n{\n" << endl; 
 				printVals();
 				cout << $5.traducao << "\t\n	return 0;\n}" << endl; 	
@@ -116,18 +115,31 @@ S 			: TK_TIPO_INT TK_MAIN '(' ')' BLOCO
 				}
 			;
 
-BLOCO		: '{' COMANDOS '}'
+BLOCO		: '{' INICIO COMANDOS '}'
 			{
-				if (!pilha_de_simbolos.empty()) {
-        			pilha_de_simbolos.pop_back();
-					cout << "teste" << endl;
-				}
-				$$.traducao = $2.traducao;
+		
+				$$.traducao = $3.traducao;
 				
 				
 			
 			}
 			;
+INICIO		:{
+				std::list<TIPO_SIMBOLO> newTabela;
+				TIPO_SIMBOLO teste;
+				if(!pilha_de_simbolos.empty())
+				{
+					escopo++;
+				}
+			
+				pilha_de_simbolos.push_back(newTabela);
+				
+				
+
+			}
+FIM   		:{
+				pilha_de_simbolos.pop_back();
+			}
 
 COMANDOS	: COMANDO COMANDOS
 			{
@@ -143,13 +155,6 @@ COMANDOS	: COMANDO COMANDOS
 
 COMANDO 	: E ';'
 			| BLOCO
-			{
-				
-				std::list<TIPO_SIMBOLO> newTabela;
-				pilha_de_simbolos.push_back(newTabela);
-				
-				
-			}
 			| TK_TIPO_INT TK_ID ';'
 			{
 				cout << "Teste de escopo" << endl;
@@ -170,12 +175,12 @@ COMANDO 	: E ';'
 				
 
 				$$.traducao = "";
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 
 			|TK_TIPO_FLOAT TK_ID ';'
 			{
-				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
+				for(const TIPO_SIMBOLO& index : pilha_de_simbolos[escopo]){
 					
 					if(index.nomeVal == $2.label){
 						yyerror("Variavel já declarada (TK_TIPO_FLOAT)");
@@ -188,11 +193,11 @@ COMANDO 	: E ';'
 				valor.tipoVal = "float";
 
 				$$.traducao = "";
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 			|TK_TIPO_CHAR TK_ID ';'
 			{
-				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
+				for(const TIPO_SIMBOLO& index : pilha_de_simbolos[escopo]){
 					
 					if(index.nomeVal == $2.label){
 						yyerror("Variavel já declarada (TK_TIPO_CHAR)");
@@ -205,28 +210,11 @@ COMANDO 	: E ';'
 				valor.tipoVal = "char";
 
 				$$.traducao = "";
-				tabela_de_simbolos.push_back(valor);
-			}
-			|TK_TIPO_STRING TK_ID ';'
-			{
-				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
-					
-					if(index.nomeVal == $2.label){
-						yyerror("Variavel já declarada (TK_TIPO_STRING)");
-					}
-				}
-
-				TIPO_SIMBOLO valor;
-				valor.nomeVal = $2.label;
-				valor.tempName = genLabel();
-				valor.tipoVal = "string";
-
-				$$.traducao = "";
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 			|TK_TIPO_BOOLEAN TK_ID ';'
 			{
-				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
+				for(const TIPO_SIMBOLO& index : pilha_de_simbolos[escopo]){
 					
 					if(index.nomeVal == $2.label){
 						yyerror("Variavel já declarada (TK_TIPO_BOOLEAN)");
@@ -239,7 +227,24 @@ COMANDO 	: E ';'
 				valor.tipoVal = "bool";
 
 				$$.traducao = "";
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
+			}
+			|TK_TIPO_STRING TK_ID ';'
+			{
+				for(const TIPO_SIMBOLO& index : pilha_de_simbolos[escopo]){
+					
+					if(index.nomeVal == $2.label){
+						yyerror("Variavel já declarada (TK_TIPO_STRING)");
+					}
+				}
+
+				TIPO_SIMBOLO valor;
+				valor.nomeVal = $2.label;
+				valor.tempName = genLabel();
+				valor.tipoVal = "string";
+
+				$$.traducao = "";
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 			;		
 			
@@ -278,7 +283,7 @@ E 			: E '*' E
 				valor.tipoVal = $$.tipo;
 
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 E 			: E '/' E
 			{
@@ -315,7 +320,7 @@ E 			: E '/' E
 				valor.tipoVal = $$.tipo;
 
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 E 			: E '+' E
 			{
@@ -352,7 +357,7 @@ E 			: E '+' E
 				valor.tipoVal = $$.tipo;
 
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 				
 			}
 E 			: E '-' E
@@ -390,7 +395,7 @@ E 			: E '-' E
 				valor.tipoVal = $$.tipo;
 
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 
 			//Operações relacionais
@@ -435,7 +440,7 @@ E 			: E '>' E
 				cout << valor.nomeVal << endl;
 				cout << valor.tipoVal << endl;
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 
 E 			: E '<' E
@@ -480,7 +485,7 @@ E 			: E '<' E
 				cout << valor.nomeVal << endl;
 				cout << valor.tipoVal << endl;
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 
 			
@@ -526,7 +531,7 @@ E 			: E TK_REL_IGUALD E
 				cout << valor.nomeVal << endl;
 				cout << valor.tipoVal << endl;
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 E 			: E TK_REL_DIF E
 			{
@@ -570,7 +575,7 @@ E 			: E TK_REL_DIF E
 				cout << valor.nomeVal << endl;
 				cout << valor.tipoVal << endl;
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 E 			: E TK_REL_MAIOR E
 			{
@@ -615,7 +620,7 @@ E 			: E TK_REL_MAIOR E
 				cout << valor.nomeVal << endl;
 				cout << valor.tipoVal << endl;
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 E 			: E TK_REL_MENOR E
 			{
@@ -659,7 +664,7 @@ E 			: E TK_REL_MENOR E
 				cout << valor.nomeVal << endl;
 				cout << valor.tipoVal << endl;
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 			
 			//Operação de logica
@@ -697,7 +702,7 @@ E 			: E TK_OR E
 				valor.tipoVal = $$.tipo;
 
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 
 E 			: E TK_AND E
@@ -743,12 +748,13 @@ E 			: E TK_AND E
 				TIPO_SIMBOLO val;
 				
 				
-				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
-					
-					if(index.nomeVal == $1.label){
+				for (const std::list<TIPO_SIMBOLO>& lista : pilha_de_simbolos) {
+					for (const TIPO_SIMBOLO& index : lista) {
+						if(index.nomeVal == $$.label){
 						val = index;
 						missing = true;
 
+						}
 					}
 				}
 				if(!missing){
@@ -792,7 +798,7 @@ E 			: E TK_AND E
 				valor.tipoVal = "float";
 
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 			| TK_CONV_FLOAT TK_INT
 			{
@@ -808,7 +814,7 @@ E 			: E TK_AND E
 				valor.tipoVal = "int";
 
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 			| TK_INT
 			{
@@ -824,7 +830,7 @@ E 			: E TK_AND E
 				valor.tipoVal = "int";
 
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 			}
 			| TK_FLOAT
 			{
@@ -840,7 +846,7 @@ E 			: E TK_AND E
 				valor.tipoVal = "float";
 
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 
 		
 
@@ -859,7 +865,7 @@ E 			: E TK_AND E
 				valor.tipoVal = "char";
 
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 
 			}
 			| TK_STRING
@@ -894,7 +900,7 @@ E 			: E TK_AND E
 				valor.tipoVal = "bool";
 
 				
-				tabela_de_simbolos.push_back(valor);
+				pilha_de_simbolos[escopo].push_back(valor);
 	
 			}
 
@@ -903,13 +909,13 @@ E 			: E TK_AND E
 				bool missing = false;
 				TIPO_SIMBOLO val;
 				
-				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
-					
-					
-					if(index.nomeVal == $$.label){
+				for (const std::list<TIPO_SIMBOLO>& lista : pilha_de_simbolos) {
+					for (const TIPO_SIMBOLO& index : lista) {
+						if(index.nomeVal == $$.label){
 						val = index;
 						missing = true;
 
+						}
 					}
 				}
 				if(!missing){
