@@ -838,122 +838,122 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 39 "lexica.l"
-
+#line 41 "lexica.l"
+{return TK_IF;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 40 "lexica.l"
-
+#line 42 "lexica.l"
+{return TK_ELSE;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 41 "lexica.l"
-
+#line 43 "lexica.l"
+{return TK_FOR;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 42 "lexica.l"
-
+#line 44 "lexica.l"
+{return TK_WHILE;}
 	YY_BREAK
 case 13:
-YY_RULE_SETUP
-#line 47 "lexica.l"
-{ return *yytext; }
-	YY_BREAK
-case 14:
 YY_RULE_SETUP
 #line 50 "lexica.l"
 { return *yytext; }
 	YY_BREAK
-case 15:
+case 14:
 YY_RULE_SETUP
 #line 53 "lexica.l"
+{ return *yytext; }
+	YY_BREAK
+case 15:
+YY_RULE_SETUP
+#line 56 "lexica.l"
 {return *yytext; return TK_OPERADORES;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 55 "lexica.l"
+#line 58 "lexica.l"
 {return TK_REL_MENOR;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 56 "lexica.l"
+#line 59 "lexica.l"
 {return TK_REL_MAIOR;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 57 "lexica.l"
+#line 60 "lexica.l"
 {return TK_REL_IGUALD;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 58 "lexica.l"
+#line 61 "lexica.l"
 {return TK_REL_DIF;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 60 "lexica.l"
+#line 63 "lexica.l"
 {return TK_OR;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 61 "lexica.l"
+#line 64 "lexica.l"
 {return TK_AND;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 64 "lexica.l"
+#line 67 "lexica.l"
 {return '=';}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 65 "lexica.l"
+#line 68 "lexica.l"
 {return TK_CONV_FLOAT;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 66 "lexica.l"
+#line 69 "lexica.l"
 {return TK_CONV_INT;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 69 "lexica.l"
+#line 72 "lexica.l"
 { yylval.traducao = yytext; return TK_INT; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 70 "lexica.l"
+#line 73 "lexica.l"
 { yylval.traducao = yytext; return TK_FLOAT; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 71 "lexica.l"
+#line 74 "lexica.l"
 { yylval.traducao = yytext; return TK_CHAR; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 72 "lexica.l"
+#line 75 "lexica.l"
 { yylval.traducao = yytext; return TK_STRING; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 73 "lexica.l"
+#line 76 "lexica.l"
 { yylval.traducao = yytext; return TK_BOOLEAN; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 75 "lexica.l"
+#line 78 "lexica.l"
 { yylval.label = yytext; return TK_ID; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 77 "lexica.l"
+#line 80 "lexica.l"
 { *yytext; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 79 "lexica.l"
+#line 82 "lexica.l"
 ECHO;
 	YY_BREAK
 #line 960 "lex.yy.c"
@@ -1961,6 +1961,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 79 "lexica.l"
+#line 82 "lexica.l"
 
 

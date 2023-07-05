@@ -1,17 +1,17 @@
 int main()
 {
-	float a;
-	a = 1.0;
+	int a;
+	a = 1;
 	{
-		int b;
-		b = 2;
+		int a;
+		a = 2;
 		{
-			char c;
-			c = 'c';
+			int a;
+			a = 3;
 		}
 	
 	}
-	
+	a = 89;
 
 
 }

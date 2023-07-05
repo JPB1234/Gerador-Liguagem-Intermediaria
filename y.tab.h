@@ -75,8 +75,12 @@ extern int yydebug;
     TK_REL_MAIOR = 276,            /* TK_REL_MAIOR  */
     TK_REL_MENOR = 277,            /* TK_REL_MENOR  */
     TK_REL_DIF = 278,              /* TK_REL_DIF  */
-    TK_FIM = 279,                  /* TK_FIM  */
-    TK_ERROR = 280                 /* TK_ERROR  */
+    TK_IF = 279,                   /* TK_IF  */
+    TK_ELSE = 280,                 /* TK_ELSE  */
+    TK_FOR = 281,                  /* TK_FOR  */
+    TK_WHILE = 282,                /* TK_WHILE  */
+    TK_FIM = 283,                  /* TK_FIM  */
+    TK_ERROR = 284                 /* TK_ERROR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -106,8 +110,12 @@ extern int yydebug;
 #define TK_REL_MAIOR 276
 #define TK_REL_MENOR 277
 #define TK_REL_DIF 278
-#define TK_FIM 279
-#define TK_ERROR 280
+#define TK_IF 279
+#define TK_ELSE 280
+#define TK_FOR 281
+#define TK_WHILE 282
+#define TK_FIM 283
+#define TK_ERROR 284
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

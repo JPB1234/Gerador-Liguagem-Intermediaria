@@ -30,35 +30,31 @@ vector<atributos> tabela_de_temporarias;
 int escopo = 0;
 std::vector<std::list<TIPO_SIMBOLO>> pilha_de_simbolos;
 
+list<TIPO_SIMBOLO> novaTabela()
+{
+	std::list<TIPO_SIMBOLO> nova_tabela;
+	return nova_tabela;
+}
+
 void printVals(){ 
 
-	for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
-
-		if(index.tipoVal == "bool")
-		{
-			if(empty(index.tempName))
-			{
-			cout<< "	" <<"int" << " " <<index.nomeVal << ";" <<endl;
-			}
-			else
-			{
-			cout<< "	" <<"int" << " " <<index.tempName << ";" <<endl;
-			}
-		}
-		else
-		{
-			if(empty(index.tempName))
-			{
-			cout<< "	" <<index.tipoVal << " " <<index.nomeVal << ";" <<endl;
-			}
-			else
-			{
-			cout<< "	" <<index.tipoVal << " " <<index.tempName << ";" <<endl;
+	for (const std::list<TIPO_SIMBOLO>& lista : pilha_de_simbolos) {
+		for (const TIPO_SIMBOLO& index : lista) {
+			if (index.tipoVal == "bool") {
+				if (empty(index.tempName)) {
+					cout << "\t" << "int" << " " << index.nomeVal << ";" << endl;
+				} else {
+					cout << "\t" << "int" << " " << index.tempName << ";" << endl;
+				}
+			} else {
+				if (empty(index.tempName)) {
+					cout << "\t" << index.tipoVal << " " << index.nomeVal << ";" << endl;
+				} else {
+					cout << "\t" << index.tipoVal << " " << index.tempName << ";" << endl;
+				}
 			}
 		}
-		
-		
-	}
+}
 	
 }
 
@@ -69,6 +65,7 @@ string genLabel(){
 	ss <<"temp" << contador++;
 	return ss.str(); 
 }
+
 
 
 
@@ -111,17 +108,23 @@ void yyerror(string);
 
 S 			: TK_TIPO_INT TK_MAIN '(' ')' BLOCO
 			{
+				pilha_de_simbolos.push_back(tabela_de_simbolos);
 				cout << "/*Compilador FOCA*/\n" << "#include <iostream>\n#include<string.h>\n#include<stdio.h>\nint main(void)\n{\n" << endl; 
 				printVals();
-				cout << $5.traducao << "\t\n	return 0;\n}" << endl; 			
+				cout << $5.traducao << "\t\n	return 0;\n}" << endl; 	
+				
 				}
 			;
 
 BLOCO		: '{' COMANDOS '}'
 			{
-
-				pilha_de_simbolos.push_back(tabela_de_simbolos);
+				if (!pilha_de_simbolos.empty()) {
+        			pilha_de_simbolos.pop_back();
+					cout << "teste" << endl;
+				}
 				$$.traducao = $2.traducao;
+				
+				
 			
 			}
 			;
@@ -129,6 +132,8 @@ BLOCO		: '{' COMANDOS '}'
 COMANDOS	: COMANDO COMANDOS
 			{
 				$$.traducao = $1.traducao + $2.traducao;
+
+				
 			}
 			|
 			{
@@ -138,15 +143,26 @@ COMANDOS	: COMANDO COMANDOS
 
 COMANDO 	: E ';'
 			| BLOCO
+			{
+				
+				std::list<TIPO_SIMBOLO> newTabela;
+				pilha_de_simbolos.push_back(newTabela);
+				
+				
+			}
 			| TK_TIPO_INT TK_ID ';'
 			{
-				for(const TIPO_SIMBOLO& index : tabela_de_simbolos){
-					
-					if(index.nomeVal == $2.label){
-						yyerror("Variavel já declarada (TK_TIPO_INT)");
+				cout << "Teste de escopo" << endl;
+				for (const std::list<TIPO_SIMBOLO>& lista : pilha_de_simbolos) {
+					for (const TIPO_SIMBOLO& index : lista) {
+						cout <<"llllllll" << endl;
+						cout << $2.label << endl;
+						if(index.nomeVal == $2.label){
+							yyerror("Variavel já declarada (TK_TIPO_INT)");
+						}
 					}
 				}
-
+				cout << "Fim do teste de escopo" << endl;
 				TIPO_SIMBOLO valor;
 				valor.nomeVal = $2.label;
 				valor.tempName = genLabel();
@@ -225,8 +241,7 @@ COMANDO 	: E ';'
 				$$.traducao = "";
 				tabela_de_simbolos.push_back(valor);
 			}
-			;
-E			
+			;		
 			
 			// Operadoções aritmeticas
 E 			: E '*' E
@@ -245,8 +260,6 @@ E 			: E '*' E
 					else{yyerror("Variaveis de tipos diferentes (Operação '*')");}
 				}
 
-				
-				
 				$$.tipo = $3.tipo;
 				string label = genLabel();
 				if(convTest == 1){
