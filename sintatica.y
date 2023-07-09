@@ -279,7 +279,10 @@ COMANDO 	: E ';'
 				$$.traducao = "";
 				pilha_de_simbolos[escopo].push_back(valor);
 			}
-			;		
+			;	
+
+
+			// I/O cin e cout 	
 IMP			:TK_COUT TK_ESPACOS E COISAS ';'
 			{
 				$$.traducao = $3.traducao +"\tcout << " + $3.label + ";\n" + $4.traducao ;
@@ -315,6 +318,8 @@ COISAS2		:
 				
 			}
 			;
+
+
 			// Operadoções aritmeticas
 E 			: E '*' E
 			{

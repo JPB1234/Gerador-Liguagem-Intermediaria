@@ -737,10 +737,10 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int16 yyrline[] =
 {
        0,   124,   124,   133,   142,   151,   164,   170,   177,   182,
-     183,   184,   188,   189,   190,   213,   230,   247,   264,   283,
-     291,   299,   300,   309,   310,   319,   355,   392,   441,   480,
-     525,   571,   615,   659,   704,   750,   787,   824,   874,   890,
-     906,   922,   941,   958,   977,  1001
+     183,   184,   188,   189,   190,   213,   230,   247,   264,   286,
+     294,   302,   303,   312,   313,   322,   358,   395,   444,   483,
+     528,   574,   618,   662,   707,   753,   790,   827,   877,   893,
+     909,   925,   944,   961,   980,  1004
 };
 #endif
 
@@ -1584,7 +1584,7 @@ yyreduce:
     break;
 
   case 19: /* IMP: TK_COUT TK_ESPACOS E COISAS ';'  */
-#line 284 "sintatica.y"
+#line 287 "sintatica.y"
                         {
 				yyval.traducao = yyvsp[-2].traducao +"\tcout << " + yyvsp[-2].label + ";\n" + yyvsp[-1].traducao ;
 				cout << yyvsp[-1].tipo << endl;
@@ -1594,7 +1594,7 @@ yyreduce:
     break;
 
   case 20: /* ESC: TK_CIN TK_RECEBER E COISAS2 ';'  */
-#line 292 "sintatica.y"
+#line 295 "sintatica.y"
                         {
 				yyval.traducao = yyvsp[-2].traducao +"\tcin >> " + yyvsp[-2].label + ";\n" + yyvsp[-1].traducao ;
 				cout << yyvsp[-1].tipo << endl;
@@ -1604,7 +1604,7 @@ yyreduce:
     break;
 
   case 22: /* COISAS: TK_ESPACOS E COISAS  */
-#line 301 "sintatica.y"
+#line 304 "sintatica.y"
                         {
 
 				yyval.traducao = yyvsp[-1].traducao + yyvsp[0].traducao + "\tcout << " + yyvsp[-1].label + ";\n";
@@ -1615,7 +1615,7 @@ yyreduce:
     break;
 
   case 24: /* COISAS2: TK_RECEBER E COISAS2  */
-#line 311 "sintatica.y"
+#line 314 "sintatica.y"
                         {
 
 				yyval.traducao = yyvsp[-1].traducao + yyvsp[0].traducao + "\tcin >> " + yyvsp[-1].label + ";\n";
@@ -1626,7 +1626,7 @@ yyreduce:
     break;
 
   case 25: /* E: E '*' E  */
-#line 320 "sintatica.y"
+#line 323 "sintatica.y"
                         {
 				int convTest = 0;
 				if(yyvsp[-2].tipo != yyvsp[0].tipo){
@@ -1666,7 +1666,7 @@ yyreduce:
     break;
 
   case 26: /* E: E '/' E  */
-#line 356 "sintatica.y"
+#line 359 "sintatica.y"
                         {
 				int convTest = 0;
 				if(yyvsp[-2].tipo != yyvsp[0].tipo){
@@ -1707,7 +1707,7 @@ yyreduce:
     break;
 
   case 27: /* E: E '+' E  */
-#line 393 "sintatica.y"
+#line 396 "sintatica.y"
                         {
 				int convTest = 0;
 				if(yyvsp[-2].tipo != yyvsp[0].tipo){
@@ -1760,7 +1760,7 @@ yyreduce:
     break;
 
   case 28: /* E: E '-' E  */
-#line 442 "sintatica.y"
+#line 445 "sintatica.y"
                         {
 				int convTest = 0;
 				if(yyvsp[-2].tipo != yyvsp[0].tipo){
@@ -1801,7 +1801,7 @@ yyreduce:
     break;
 
   case 29: /* E: E '>' E  */
-#line 481 "sintatica.y"
+#line 484 "sintatica.y"
                         {
 				
 				int convTest = 0;
@@ -1849,7 +1849,7 @@ yyreduce:
     break;
 
   case 30: /* E: E '<' E  */
-#line 526 "sintatica.y"
+#line 529 "sintatica.y"
                         {
 				int convTest = 0;
 				if(yyvsp[-2].tipo != yyvsp[0].tipo){
@@ -1897,7 +1897,7 @@ yyreduce:
     break;
 
   case 31: /* E: E TK_REL_IGUALD E  */
-#line 572 "sintatica.y"
+#line 575 "sintatica.y"
                         {
 				int convTest = 0;
 				if(yyvsp[-2].tipo != yyvsp[0].tipo){
@@ -1945,7 +1945,7 @@ yyreduce:
     break;
 
   case 32: /* E: E TK_REL_DIF E  */
-#line 616 "sintatica.y"
+#line 619 "sintatica.y"
                         {
 				int convTest = 0;
 				if(yyvsp[-2].tipo != yyvsp[0].tipo){
@@ -1993,7 +1993,7 @@ yyreduce:
     break;
 
   case 33: /* E: E TK_REL_MAIOR E  */
-#line 660 "sintatica.y"
+#line 663 "sintatica.y"
                         {
 				int convTest = 0;
 				if(yyvsp[-2].tipo != yyvsp[0].tipo){
@@ -2042,7 +2042,7 @@ yyreduce:
     break;
 
   case 34: /* E: E TK_REL_MENOR E  */
-#line 705 "sintatica.y"
+#line 708 "sintatica.y"
                         {
 				int convTest = 0;
 				if(yyvsp[-2].tipo != yyvsp[0].tipo){
@@ -2090,7 +2090,7 @@ yyreduce:
     break;
 
   case 35: /* E: E TK_OR E  */
-#line 751 "sintatica.y"
+#line 754 "sintatica.y"
                         {
 				int convTest = 0;
 				if(yyvsp[-2].tipo != yyvsp[0].tipo){
@@ -2130,7 +2130,7 @@ yyreduce:
     break;
 
   case 36: /* E: E TK_AND E  */
-#line 788 "sintatica.y"
+#line 791 "sintatica.y"
                         {
 				int convTest = 0;
 				if(yyvsp[-2].tipo != yyvsp[0].tipo){
@@ -2169,7 +2169,7 @@ yyreduce:
     break;
 
   case 37: /* E: TK_ID '=' E  */
-#line 825 "sintatica.y"
+#line 828 "sintatica.y"
                         {
 				bool missing = false;
 				TIPO_SIMBOLO val;
@@ -2223,7 +2223,7 @@ yyreduce:
     break;
 
   case 38: /* E: TK_CONV_FLOAT TK_INT  */
-#line 875 "sintatica.y"
+#line 878 "sintatica.y"
                         {
 				yyval.tipo = "float";
 				string label = genLabel();
@@ -2243,7 +2243,7 @@ yyreduce:
     break;
 
   case 39: /* E: TK_CONV_FLOAT TK_INT  */
-#line 891 "sintatica.y"
+#line 894 "sintatica.y"
                         {
 				yyval.tipo = "int";
 				string label = genLabel();
@@ -2263,7 +2263,7 @@ yyreduce:
     break;
 
   case 40: /* E: TK_INT  */
-#line 907 "sintatica.y"
+#line 910 "sintatica.y"
                         {
 				yyval.tipo = "int";
 				string label = genLabel();
@@ -2283,7 +2283,7 @@ yyreduce:
     break;
 
   case 41: /* E: TK_FLOAT  */
-#line 923 "sintatica.y"
+#line 926 "sintatica.y"
                         {
 				yyval.tipo = "float";
 				string label = genLabel();
@@ -2306,7 +2306,7 @@ yyreduce:
     break;
 
   case 42: /* E: TK_CHAR  */
-#line 942 "sintatica.y"
+#line 945 "sintatica.y"
                         {
 				yyval.tipo = "char";
 				string label = genLabel();
@@ -2327,7 +2327,7 @@ yyreduce:
     break;
 
   case 43: /* E: TK_STRING  */
-#line 959 "sintatica.y"
+#line 962 "sintatica.y"
                         {
 				yyval.tipo = "string";
 				string label = genLabel();
@@ -2350,7 +2350,7 @@ yyreduce:
     break;
 
   case 44: /* E: TK_BOOLEAN  */
-#line 978 "sintatica.y"
+#line 981 "sintatica.y"
                         {
 				yyval.tipo = "bool";
 				string label = genLabel();
@@ -2377,7 +2377,7 @@ yyreduce:
     break;
 
   case 45: /* E: TK_ID  */
-#line 1002 "sintatica.y"
+#line 1005 "sintatica.y"
                         {
 				bool missing = false;
 				TIPO_SIMBOLO val;
@@ -2598,7 +2598,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 1027 "sintatica.y"
+#line 1030 "sintatica.y"
 
 
 #include "lex.yy.c"
