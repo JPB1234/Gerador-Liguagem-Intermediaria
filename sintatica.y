@@ -181,6 +181,11 @@ COMANDOS	: COMANDO COMANDOS
 
 COMANDO 	: E ';'
 			| NEWBLOCO
+			|TK_IF'('E')' BLOCO
+			{
+
+			}
+			| ESC
 			| IMP
 			| TK_TIPO_INT TK_ID ';'
 			{
@@ -275,31 +280,41 @@ COMANDO 	: E ';'
 				pilha_de_simbolos[escopo].push_back(valor);
 			}
 			;		
-IMP			:TK_COUT TK_ESPACOS E COISAS
+IMP			:TK_COUT TK_ESPACOS E COISAS ';'
 			{
-				$$.traducao = $3.traducao  + "\tcout << " + $3.label + ";\n";
+				$$.traducao = $3.traducao +"\tcout << " + $3.label + ";\n" + $4.traducao ;
 				cout << $4.tipo << endl;
 				
 			}
 			;
-ESC			:TK_CIN TK_RECEBER E 
+
+ESC			:TK_CIN TK_RECEBER E  COISAS2 ';'
 			{
-				$$.traducao = $3.traducao  + "\tcin >> " + $3.label + ";\n";
-				cout << $3.tipo << endl;
+				$$.traducao = $3.traducao +"\tcin >> " + $3.label + ";\n" + $4.traducao ;
+				cout << $4.tipo << endl;
 				
 			}
 			;
+
 COISAS		:
 			|TK_ESPACOS E COISAS
 			{
-				$$.traducao = $2.traducao + $3.traducao;
+
+				$$.traducao = $2.traducao + $3.traducao + "\tcout << " + $2.label + ";\n";
 				
 				
 			}
 			;
 
+COISAS2		:
+			|TK_RECEBER E COISAS2
+			{
 
-
+				$$.traducao = $2.traducao + $3.traducao + "\tcin >> " + $2.label + ";\n";
+				
+				
+			}
+			;
 			// Operadoções aritmeticas
 E 			: E '*' E
 			{
@@ -464,6 +479,7 @@ E 			: E '-' E
 			//Operações relacionais
 E 			: E '>' E
 			{
+				
 				int convTest = 0;
 				if($1.tipo != $3.tipo){
 					if($1.tipo == "float" && $3.tipo == "int"){
@@ -1026,4 +1042,4 @@ void yyerror( string MSG )
 {
 	cout << MSG << endl;
 	exit (0);
-}
+}				
