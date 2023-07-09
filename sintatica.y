@@ -5,6 +5,7 @@
 #include <vector>
 #include <list>
 
+
 #define YYSTYPE atributos
 
 using namespace std;
@@ -82,6 +83,8 @@ void yyerror(string);
 %token TK_AND TK_OR
 %token TK_REL_IGUALD TK_REL_MAIOR TK_REL_MENOR TK_REL_DIF
 %token TK_IF TK_ELSE TK_FOR TK_WHILE
+%token TK_CIN
+%token TK_RECEBE
 %token TK_FIM TK_ERROR 
 
 %start S
@@ -247,6 +250,14 @@ COMANDO 	: E ';'
 				pilha_de_simbolos[escopo].push_back(valor);
 			}
 			;		
+
+ESC			:TK_CIN TK_RECEBE E COISAS
+			{
+				$$.traducao = $3.traducao  + "\tcin << " + $3.label + ";\n";
+				cout << $4.tipo << endl;
+				
+			}
+			;
 			
 			// Operadoções aritmeticas
 E 			: E '*' E
@@ -928,6 +939,9 @@ E 			: E TK_AND E
 				
 				$$.traducao = "\t" + $$.label +" = " + $1.label + ";\n";
 			}
+
+			
+			
 			;
 
 %%
