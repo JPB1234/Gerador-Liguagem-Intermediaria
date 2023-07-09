@@ -180,6 +180,10 @@ COMANDOS	: COMANDO COMANDOS
 
 COMANDO 	: E ';'
 			| NEWBLOCO
+			|TK_IF'('E')' BLOCO
+			{
+
+			}
 			| IMP
 			| TK_TIPO_INT TK_ID ';'
 			{
@@ -274,9 +278,9 @@ COMANDO 	: E ';'
 				pilha_de_simbolos[escopo].push_back(valor);
 			}
 			;		
-IMP			:TK_COUT TK_ESPACOS E COISAS
+IMP			:TK_COUT TK_ESPACOS E COISAS ';'
 			{
-				$$.traducao = $3.traducao  + "\tcout << " + $3.label + ";\n";
+				$$.traducao = $3.traducao +"\tcout << " + $3.label + ";\n" + $4.traducao ;
 				cout << $4.tipo << endl;
 				
 			}
@@ -284,7 +288,8 @@ IMP			:TK_COUT TK_ESPACOS E COISAS
 COISAS		:
 			|TK_ESPACOS E COISAS
 			{
-				$$.traducao = $2.traducao + $3.traducao;
+
+				$$.traducao = $2.traducao + $3.traducao + "\tcout << " + $2.label + ";\n";
 				
 				
 			}
@@ -453,6 +458,7 @@ E 			: E '-' E
 			//Operações relacionais
 E 			: E '>' E
 			{
+				
 				int convTest = 0;
 				if($1.tipo != $3.tipo){
 					if($1.tipo == "float" && $3.tipo == "int"){

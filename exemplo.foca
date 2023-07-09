@@ -1,9 +1,4 @@
 int main()
 {
-	string a;
-	string b;
-	a = "oi";
-	b = "ab";
-	cout << a << b
-
+	2 >1;
 }
