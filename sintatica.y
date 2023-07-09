@@ -258,7 +258,14 @@ ESC			:TK_CIN TK_RECEBE E COISAS
 				
 			}
 			;
-			
+COISAS		:
+			|TK_RECEBE E COISAS
+			{
+				$$.traducao = $2.traducao + $3.traducao;
+				
+				
+			}
+			;
 			// Operadoções aritmeticas
 E 			: E '*' E
 			{
