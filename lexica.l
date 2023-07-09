@@ -36,7 +36,6 @@ BOOLEAN ({TRUE}|{FALSE})
 "bool"      {return TK_TIPO_BOOLEAN;}
 
 
-     
   
 "if"  		{return TK_IF;}
 "else" 		{return TK_ELSE;}
@@ -44,7 +43,8 @@ BOOLEAN ({TRUE}|{FALSE})
 "while"     {return TK_WHILE;}
 
 
-
+"cout"      {return TK_COUT;}
+"<<"        {return TK_ESPACOS;}
 
 
 [(){}[\];,]	{ return *yytext; }
