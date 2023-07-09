@@ -42,10 +42,10 @@ BOOLEAN ({TRUE}|{FALSE})
 "for"	    {return TK_FOR;}
 "while"     {return TK_WHILE;}
 
-
+"cin"       {return TK_CIN;}
 "cout"      {return TK_COUT;}
 "<<"        {return TK_ESPACOS;}
-
+">>"        {return TK_RECEBER;}
 
 [(){}[\];,]	{ return *yytext; }
 

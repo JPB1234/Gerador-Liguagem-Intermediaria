@@ -96,6 +96,7 @@ void yyerror(string);
 %token TK_REL_IGUALD TK_REL_MAIOR TK_REL_MENOR TK_REL_DIF
 %token TK_IF TK_ELSE TK_FOR TK_WHILE
 %token TK_COUT TK_ESPACOS
+%token TK_CIN TK_RECEBER
 %token TK_FIM TK_ERROR 
 
 %start S
@@ -281,6 +282,13 @@ IMP			:TK_COUT TK_ESPACOS E COISAS
 				
 			}
 			;
+ESC			:TK_CIN TK_RECEBER E 
+			{
+				$$.traducao = $3.traducao  + "\tcin >> " + $3.label + ";\n";
+				cout << $3.tipo << endl;
+				
+			}
+			;
 COISAS		:
 			|TK_ESPACOS E COISAS
 			{
@@ -289,6 +297,9 @@ COISAS		:
 				
 			}
 			;
+
+
+
 			// Operadoções aritmeticas
 E 			: E '*' E
 			{
